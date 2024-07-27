@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <h1 class="display-4" style="font-weight:400;">{{ item.restaurant }}</h1>
+    <img src="{{ item.image }}" alt="{{ item.alt }}" class="img-fluid rounded" style="max-width: 400px; height: auto">
+    <p class="mt-3"><strong>Rating:</strong> {{ item.rating }}</p>
+    <p><strong>Cuisine:</strong></p>
+    <ul>
+    {% for cuisine in item.cuisine %}
+        <li><a href="{{ url_for('search', query=cuisine) }}">{{ cuisine }}</a></li>
+    {% endfor %}
+    </ul>
+    <p><strong>Price Range:</strong> {{ item['priceRange'] }}</p>
+    <p><strong>Location:</strong> {{ item.location }}</p>
+    <p><strong>Popular Dishes:</strong></p>
+    <ul>
+    {% for dish in item.popularDishes %}
+        <li>{{ dish }}</li>
+    {% endfor %}
+    </ul>
+    <p><strong>Helpful Review:</strong> {{ item['helpfulReview'] }}</p>
+    <p><strong>Similar Restaurants:</strong></p>
+    <ul>
+        {% for similar in similar_restaurants %}
+        <li><a href="{{ url_for('view', id=similar['id']) }}"> {{ similar['restaurant'] }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <br>
+    <!-- Add this inside view.html where appropriate -->
+    <a href="{{ url_for('edit', id=item['id']) }}" style="color: black; font-style: italic;">Edit this page</a>
+
+    <br>
+    <br>
+
+    <a href="{{ url_for('index') }}" class="btn btn-primary" style="background-color: rgb(114, 77, 83); border-color: rgb(50, 33, 33);">Back to Home</a>
+</div>
+<br>
+<br>
+{% endblock %}
+<!-- Optional JavaScript; choose one of the two! -->
+<!-- Option 1: Bootstrap Bundle with Popper -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
+<!-- Option 2: Separate Popper and Bootstrap JS -->
+<!--
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
+-->

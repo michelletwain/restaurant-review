@@ -1,0 +1,46 @@
+
+/* Main styles for the application */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+nav {
+    background-color: #007bff;
+    color: #ffffff;
+    padding: 10px 0;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    margin: 0 20px;
+}
+
+nav ul li a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.container {
+    padding: 20px;
+}
+
+/* Responsive design adjustments */
+@media (max-width: 600px) {
+    nav ul li {
+        margin: 0 10px;
+    }
+
+    .container {
+        padding: 10px;
+    }
+}
+

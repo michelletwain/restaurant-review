@@ -1,0 +1,45 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<br>
+
+{% if results_count > 0 %}
+<p style="font-style: italic;">{{ results_count }} results found for "{{ query }}"</p>
+<br>
+  <ul class="list-group">
+    <li>Restaurants matching your search query based on title:</li>
+    {% for id, item in restaurantResults.items() %}
+      <li class="list-group-item">
+        <a href="{{ url_for('view', id=id) }}" class="search-result">{{ item['restaurant']  | safe }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+  <br>
+  <ul class="list-group">
+    <li>Restaurants matching your search query based on cuisine:</li>
+    {% for id, item in cuisineResults.items() %}
+      <li class="list-group-item">
+        <a href="{{ url_for('view', id=id) }}">{{ item['restaurant']}}</a>
+        <p>Cuisines: {{ item['cuisine'] | safe }}</p>
+      </li>
+    {% endfor %}
+  </ul>
+  <br>
+  <ul class="list-group">
+    <li>Restaurants matching your search query based on popular dishes:</li>
+    {% for id, item in dishResults.items() %}
+      <li class="list-group-item">
+        <a href="{{ url_for('view', id=id) }}">{{ item['restaurant'] }}</a>
+        <p>Popular Dishes: {{ item['PopularDishes'] | safe }}</p>
+      </li>
+    {% endfor %}
+  </ul>
+  <br>
+  <br>
+  <br>
+{% else %}
+  <p>No results found for "{{ query }}".</p>
+{% endif %}
+
+{% endblock %}
+

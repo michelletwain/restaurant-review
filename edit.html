@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<br>
+<h1 class="display-4">Editing: {{ item.restaurant }}</h1>
+<br>
+<form method="POST">
+    <label for="helpfulReview">Helpful Review:</label>
+    <br>
+    <textarea id="helpfulReview" name="helpfulReview" style="width:900px;">{{ item['helpfulReview'] }}</textarea>
+    <br>
+    <label for="cuisine" style="padding-top: 10px;">Cuisine:</label>
+    <input type="text" id="cuisine" name="cuisine" value="{{ item['cuisine'] | join(', ') }}">
+    <br>
+    <label for="popularDishes" style="padding-top: 15px;">Popular Dishes:</label>
+    <input type="text" id="PopularDishes" name="popularDishes" value="{{ item['popularDishes'] | join(', ') }}">
+    
+    <!-- Add other fields as necessary -->
+    <br>
+    <br>
+    <button type="submit" class="btn btn-primary" style="background-color: rgb(114, 77, 83); border-color: rgb(50, 33, 33);">Submit</button>
+    <br>
+    <br>
+    <button type="button" onclick="confirmDiscard()" class="btn btn-primary" style="background-color: rgb(114, 77, 83); border-color: rgb(50, 33, 33);">Discard Changes</button>
+</form>
+
+<script>
+    function confirmDiscard() {
+        const discard = confirm("Are you sure you want to discard changes?");
+        if (discard) {
+            window.location.href = "{{ url_for('view', id=id) }}";
+        }
+    }
+
+    // Function to resize textarea based on content
+    function resizeTextarea(id) {
+        var textarea = document.getElementById(id);
+        textarea.style.height = 'auto'; // Reset the height
+        textarea.style.height = textarea.scrollHeight + 'px';
+    }
+
+    // Call the function for the 'Helpful Review' textarea
+    resizeTextarea('helpfulReview');
+</script>
+{% endblock %}

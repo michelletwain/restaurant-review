@@ -1,0 +1,127 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <h2>Add New Restaurant</h2>
+    <br>
+    <!-- Add this inside the div container in add.html to display success messages -->
+    <div id="successMessage" class="alert alert-success" style="display: none;"></div>
+    <form id="addForm">
+        <div class="mb-3">
+            <label for="restaurant" class="form-label">Restaurant Name</label>
+            <input type="text" class="form-control" id="restaurant" name="restaurant" required>
+        </div>
+        <div class="mb-3">
+            <label for="image" class="form-label">Image URL</label>
+            <input type="url" class="form-control" id="image" name="image" required>
+        </div>
+        <div class="mb-3">
+            <label for="alt" class="form-label">Alt text for image</label>
+            <input type="text" class="form-control" id="alt" name="alt" required>
+        </div>
+        <div class="mb-3">
+            <label for="rating" class="form-label">Rating (range from 0.0 to 10.0)</label>
+            <input type="text" class="form-control" id="rating" name="rating" required>
+            <span id="ratingError" class="error" style="color: red; display: none;"></span>
+        </div>
+        <div class="mb-3">
+            <label for="helpfulReview" class="form-label">Helpful Review</label>
+            <textarea class="form-control" id="helpfulReview" name="helpfulReview" rows="3" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="cuisine" class="form-label">Cuisine (comma-separated)</label>
+            <input type="text" class="form-control" id="cuisine" name="cuisine" required>
+        </div>
+        <div class="mb-3">
+            <label for="priceRange" class="form-label">Price Range (choose one: $, $$, $$$, or $$$$)</label>
+            <input type="text" class="form-control" id="priceRange" name="priceRange" required>
+        </div>
+        <div class="mb-3">
+            <label for="popularDishes" class="form-label">Popular Dishes (comma-separated)</label>
+            <input type="text" class="form-control" id="popularDishes" name="popularDishes" required>
+        </div>
+        <div class="mb-3">
+            <label for="location" class="form-label">Location</label>
+            <input type="text" class="form-control" id="location" name="location" required>
+        </div>
+        <div class="mb-3">
+            <label for="similarRestaurants" class="form-label">Similar Restaurant IDs (optional, comma-separated)</label>
+            <input type="text" class="form-control" id="similarRestaurants" name="similarRestaurants">
+        </div>
+        <button type="submit" class="btn btn-primary" id="submit" style="background-color: rgb(114, 77, 83); border-color: rgb(50, 33, 33);">Submit</button>
+        <br>
+        <br>
+    </form>
+</div>
+
+
+
+  
+<!-- Include jQuery from a CDN -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+        $('#addForm').submit(function(e) {
+            e.preventDefault();
+            var formData = {
+                "restaurant": $("#restaurant").val().trim(),
+                "image": $("#image").val().trim(),
+                "alt": $("#alt").val().trim(),
+                "rating": $("#rating").val().trim(),
+                "helpfulReview": $("#helpfulReview").val().trim(),
+                "cuisine": $("#cuisine").val().trim().split(',').map(s => s.trim()),
+                "priceRange": $("#priceRange").val().trim(),
+                "popularDishes": $("#popularDishes").val().trim().split(',').map(s => s.trim()),
+                "location": $("#location").val().trim(),
+                "similarRestaurants": $("#similarRestaurants").val().trim().split(',').map(s => s.trim())
+            };
+    
+            $.ajax({
+                type: "POST",
+                url: "/add",
+                contentType: "application/json",
+                data: JSON.stringify(formData),
+                success: function(response) {
+                    $('#successMessage').html(response.message + ' <a href="/view/' + response.id + '">See it here</a>').show();
+   
+                    $('#addForm').trigger("reset");
+                    $('#addForm input:first').focus();
+                    $('.error').text('').hide();
+                },
+                // error: function(response) {
+                //     console.log("Error:", response);
+                // }
+                // error: function(xhr, status, error) {
+                //     console.log("Error: " + xhr.status + " " + error);
+                //     console.log(xhr.responseText);  // This will log the error page HTML sent from the server
+                //     alert('An internal server error occurred. Please check the server logs for more details.');
+                // }
+                error: function(xhr) {
+                    if (xhr.status === 400) {
+                        // Clear any previous error messages
+                        $('.error').text('').hide();
+                        // Server validation errors will be in xhr.responseJSON.errors
+                        var errors = xhr.responseJSON.errors;
+                        Object.keys(errors).forEach(function(key) {
+                            var errorSpan = $('#' + key + 'Error');
+                            if(errorSpan.length) {
+                                errorSpan.text(errors[key]).show();
+                            } else {
+                                // If a specific error span doesn't exist, create a fallback display method
+                                alert(key + ": " + errors[key]);
+                            }
+                        });
+                    } else {
+                        // Handle other types of errors
+                        console.error("Error:", xhr.responseText);
+                    }
+                }
+
+            });
+        });
+</script>
+    
+
+    
+{% endblock %}
